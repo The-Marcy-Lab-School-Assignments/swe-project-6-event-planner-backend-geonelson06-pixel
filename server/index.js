@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const session = require('cookie-session');
+const path = require('path');
 
 const auth = require('./controllers/authControllers');
 const events = require('./controllers/eventControllers');
@@ -8,6 +9,7 @@ const rsvps = require('./controllers/rsvpControllers');
 const users = require('./controllers/userControllers');
 
 const checkAuth = require('./middleware/checkAuthentication');
+const pathToFrontend = process.env.NODE_ENV === 'production' ? '../frontend/dist' : '../frontend';
 
 const app = express();
 
@@ -18,7 +20,7 @@ app.use(session({
   httpOnly: true
 }));
 
-app.use(express.static(path.join(__dirname, '../client')));
+app.use(express.static(path.join(__dirname, '../frontend')));
 
 // AUTH
 app.post('/api/auth/register', auth.register);
