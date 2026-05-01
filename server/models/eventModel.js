@@ -12,6 +12,19 @@ const listEvents = async () => {
   return result.rows;
 };
 
+const getUserEvents = async (user_id) => {
+  const result = await pool.query(`
+    SELECT e.*, COUNT(r.rsvp_id) AS rsvp_count
+    FROM events e
+    LEFT JOIN rsvps r ON e.event_id = r.event_id
+    WHERE e.user_id = $1
+    GROUP BY e.event_id
+    ORDER BY e.date ASC
+  `, [user_id]);
+
+  return result.rows;
+};
+
 const createEvent = async (data, user_id) => {
   const { title, description, date, location, event_type, max_capacity } = data;
 
@@ -56,4 +69,4 @@ const deleteEvent = async (id) => {
   return result.rows[0];
 };
 
-module.exports = { listEvents, createEvent, findEvent, updateEvent, deleteEvent };
+module.exports = { listEvents, getUserEvents, createEvent, findEvent, updateEvent, deleteEvent };

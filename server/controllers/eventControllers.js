@@ -5,6 +5,19 @@ const list = async (req, res) => {
   res.json(events);
 };
 
+const listByUser = async (req, res) => {
+  try {
+    const user_id = Number(req.params.user_id);
+
+    const events = await eventModel.getUserEvents(user_id);
+
+    res.json(events);
+
+  } catch (err) {
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
 const create = async (req, res) => {
   const event = await eventModel.createEvent(req.body, req.session.userId);
   res.status(201).json(event);
@@ -30,4 +43,4 @@ const remove = async (req, res) => {
   res.json(deleted);
 };
 
-module.exports = { list, create, update, remove };
+module.exports = { list, listByUser, create, update, remove };

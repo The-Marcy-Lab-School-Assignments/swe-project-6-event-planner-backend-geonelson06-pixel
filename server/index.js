@@ -30,11 +30,13 @@ app.delete('/api/auth/logout', auth.logout);
 
 // EVENTS
 app.get('/api/events', events.list);
+app.get('/api/users/:user_id/events', events.listByUser);
 app.post('/api/events', checkAuth, events.create);
 app.patch('/api/events/:event_id', checkAuth, events.update);
 app.delete('/api/events/:event_id', checkAuth, events.remove);
 
 // RSVPS
+app.get('/api/users/:user_id/rsvps', rsvps.listUserRSVPs);
 app.post('/api/events/:event_id/rsvps', checkAuth, rsvps.create);
 app.delete('/api/events/:event_id/rsvps', checkAuth, rsvps.remove);
 

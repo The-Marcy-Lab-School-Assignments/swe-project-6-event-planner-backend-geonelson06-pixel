@@ -10,4 +10,17 @@ const remove = async (req, res) => {
   res.json(rsvp);
 };
 
-module.exports = { create, remove };
+const listUserRSVPs = async (req, res) => {
+  try {
+    const user_id = Number(req.params.user_id);
+
+    const events = await rsvpModel.getUserRSVPs(user_id);
+
+    res.json(events);
+
+  } catch (err) {
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+module.exports = { create, remove, listUserRSVPs };
