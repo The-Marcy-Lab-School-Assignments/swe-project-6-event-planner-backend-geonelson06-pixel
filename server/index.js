@@ -44,4 +44,8 @@ app.delete('/api/events/:event_id/rsvps', checkAuth, rsvps.remove);
 app.patch('/api/users/:user_id', users.updatePassword);
 app.delete('/api/users/:user_id', users.deleteUser);
 
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/index.html'));
+});
+
 app.listen(8080, () => console.log("Server running on 8080"));
