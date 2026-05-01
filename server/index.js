@@ -20,7 +20,7 @@ app.use(session({
   httpOnly: true
 }));
 
-app.use(express.static(path.join(__dirname, '../frontend')));
+app.use(express.static(path.join(__dirname, pathToFrontend)));
 
 // AUTH
 app.post('/api/auth/register', auth.register);
@@ -45,7 +45,20 @@ app.patch('/api/users/:user_id', users.updatePassword);
 app.delete('/api/users/:user_id', users.deleteUser);
 
 app.use((req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/index.html'));
+  if (req.path.startsWith('/api')) {
+    return res.status(404).json({ error: 'API route not found' });
+  }
+
+  res.sendFile(path.join(__dirname, pathToFrontend, 'index.html'));
 });
 
-app.listen(8080, () => console.log("Server running on 8080"));
+const handleError = (err, req, res, next) => {
+  console.error(err);
+  res.status(500).send({ message: 'Internal Server Error' });
+};
+
+app.use(handleError);
+
+const PORT = process.env.PORT || 8080;
+
+app.listen(PORT, () => console.log(`Server running on ${PORT}`));
